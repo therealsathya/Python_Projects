@@ -1,0 +1,124 @@
+# import statements 
+import re
+
+# all functions here 
+
+# mail id
+def my_mailid(mail_id):
+  x = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9]+\.[A-Z|a-z]{2,}\b"
+  if(re.fullmatch(x, mail_id)):
+    return 1
+  else:
+    print("Enter valid Mail id")
+    return 0
+    
+
+# password
+def my_password(password):
+  r = 0
+  for i in password:  
+    if (len(password) > 16) and (len(password) < 5):
+        r = 1
+        break
+    elif not re.search("[a-z]", password):
+        r = 1
+        break
+    elif not re.search("[A-Z]", password):
+        r = 1
+        break
+    elif not re.search("[0-9]", password):
+        r = 1
+        break
+    elif not re.search("[_@$!%&*]", password):
+        r = 1
+        break
+    elif re.search("\s", password):
+        r = 1
+        break
+    '''else:
+        r = 0
+        return'''
+  if r == 0:
+    return 1
+  else:
+    print("Enter valid password")
+    return 0
+    
+def registration():
+
+  mail_id =input("Enter your Mail Id: ")
+  password = input("Enter your password:")
+  x=my_mailid(mail_id)
+  y=my_password(password) 
+  
+  if x ==1 and y==1:
+    f = open("accounts.txt","a")
+    f.write(mail_id+"\n")
+    f.close()
+
+    f = open("passwords.txt","a")
+    f.write(password+"\n")
+    f.close()
+
+
+def login():
+  u_mailid = input()
+  u_passw = input()
+  my_accounts = open("accounts.txt", "r")
+  content = my_accounts.read()
+  accounts_list = content.split('\n')
+  my_passwords = open("passwords.txt","r")
+  content = my_passwords.read()
+  password_list = content.split('\n')
+  res = {}
+  for key in accounts_list:
+    for value in password_list:
+        res[key] = value
+        password_list.remove(value)
+        break  
+  for item in res:
+    if item == u_mailid:
+      passw = res[item]
+      if passw == u_passw:
+        print("logged in")
+      else : 
+        print("password is invalid")
+    else:
+      print("Register")
+
+  
+def f_passw():
+  flag = 0
+  u_mailid = input("Enter your Mail id:  ")
+  my_accounts = open("accounts.txt", "r")
+  content = my_accounts.read()
+  accounts_list = content.split('\n')
+  my_passwords = open("passwords.txt","r")
+  content = my_passwords.read()
+  password_list = content.split('\n')
+  res = {}
+  for key in accounts_list:
+    for value in password_list:
+        res[key] = value
+        password_list.remove(value)
+        break
+  for item in res:
+    if item == u_mailid:
+      passw = res[item]
+      flag = 1
+      break
+
+  if flag ==1: 
+    print("Your password is",passw)
+  else:
+    print("enter vaild Mail ID",flag)
+    
+user  = int(input("Enter 1 for registration, 2 for Login, 3 for forgot password: "))
+if user == 1:
+  registration()
+elif user ==2:
+  login()
+elif user ==3:
+  f_passw()
+else:
+  print("not a valid option")
